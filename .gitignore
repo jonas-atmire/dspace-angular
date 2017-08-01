@@ -29,3 +29,4 @@ morgan.log
 yarn-error.log
 
 *.css
+*.iml
