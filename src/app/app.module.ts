@@ -11,6 +11,9 @@ import { effects } from './app.effects';
 
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { NotificationModule } from './notification/notification.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -32,7 +35,7 @@ export function getConfig() {
 }
 
 @NgModule({
-  imports: [
+   imports: [
     SharedModule,
     FormsModule,
     CoreModule.forRoot(),
@@ -46,7 +49,9 @@ export function getConfig() {
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    effects
+     BrowserModule,
+     BrowserAnimationsModule,
+    effects,
   ],
   providers: [
     { provide: GLOBAL_CONFIG, useFactory: (getConfig) },
@@ -54,7 +59,7 @@ export function getConfig() {
   declarations: [
     AppComponent,
     HeaderComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
   ],
   exports: [AppComponent]
 })

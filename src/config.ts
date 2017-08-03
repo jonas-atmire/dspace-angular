@@ -1,10 +1,12 @@
 // Look in ./config folder for config
 import { InjectionToken } from '@angular/core';
+import {NotificationType} from "./app/notification/notification.model";
 
 import { ServerConfig } from './config/server-config.interface';
 import { GlobalConfig } from './config/global-config.interface';
 
 const GLOBAL_CONFIG: InjectionToken<GlobalConfig> = new InjectionToken<GlobalConfig>('config');
+
 
 const configContext = require.context('../config', false, /js$/);
 
@@ -31,6 +33,7 @@ switch (process.env.NODE_ENV) {
     // if not using webpack.prod.config.ts or webpack.test.config.ts, it must be development
     envConfigFile = './environment.dev.js';
 }
+
 
 try {
   ENV_CONFIG = configContext('./environment.default.js') as GlobalConfig;
@@ -59,6 +62,4 @@ for (const key in ENV_CONFIG) {
       ENV_CONFIG[key].port ? (ENV_CONFIG[key].port !== 80 && ENV_CONFIG[key].port !== 443) ? ':' + ENV_CONFIG[key].port : '' : ''
     ].join('');
   }
-}
-
-export { GlobalConfig, GLOBAL_CONFIG, ENV_CONFIG }
+}export {  GlobalConfig, GLOBAL_CONFIG, ENV_CONFIG }

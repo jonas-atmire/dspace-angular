@@ -1,6 +1,7 @@
 import { ServerConfig } from './server-config.interface';
 import { CacheConfig } from './cache-config.interface';
 import { UniversalConfig } from './universal-config.interface';
+import { NotificationConfig } from './notification-config.interface';
 
 export interface GlobalConfig {
   ui: ServerConfig;
@@ -11,4 +12,5 @@ export interface GlobalConfig {
   logDirectory: string;
   prerenderStrategy: string;
   debug: boolean;
+  notification: NotificationConfig
 }

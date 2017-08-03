@@ -24,6 +24,8 @@ import { ItemListElementComponent } from '../object-list/item-list-element/item-
 import { CommunityListElementComponent } from '../object-list/community-list-element/community-list-element.component';
 import { CollectionListElementComponent } from '../object-list/collection-list-element/collection-list-element.component';
 import { TruncatePipe } from './utils/truncate.pipe';
+import { NotificationsWrapperComponent } from '../notification/notifications-wrapper.component';
+import { NotificationComponent } from '../notification/notification.component';
 
 const MODULES = [
   // Do NOT include UniversalModule, HttpModule, or JsonpModule here
@@ -33,7 +35,7 @@ const MODULES = [
   FormsModule,
   ReactiveFormsModule,
   NgxPaginationModule,
-  NgbModule
+  NgbModule,
 ];
 
 const PIPES = [
@@ -55,7 +57,9 @@ const COMPONENTS = [
   ObjectListElementComponent,
   ItemListElementComponent,
   CollectionListElementComponent,
-  CommunityListElementComponent
+  CommunityListElementComponent,
+  NotificationsWrapperComponent,
+  NotificationComponent,
 ];
 
 const PROVIDERS = [
