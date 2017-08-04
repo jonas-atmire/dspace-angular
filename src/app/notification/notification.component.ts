@@ -1,57 +1,56 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { NotificationService } from './notification.service';
 import { Notification } from './notification.model';
 
 import {
   trigger,
-  state,
   style,
   animate,
-  transition
+  transition,
+  AnimationEvent
 } from '@angular/animations';
 
 @Component({
   selector: 'ds-notification',
   styleUrls: [ './notification.component.css' ],
   templateUrl: './notification.component.html',
-  animations: [ trigger('shrinkOut', [
-    state('in', style({ transform: 'translateX(0)' })),
-    transition('void => *', [
-      style({height: '0'}),
-      animate(250, style({height: '*'}))
+  outputs: ['stopAnimationNotification', 'startAnimationNotification' ],
+  animations: [ trigger('openClose', [
+    transition('* => opening', [
+      style({ height: '0' }),
+      animate(250, style({ height: '*' }))
     ]),
-    transition('* => void', [
-      style({height: '*'}),
-      animate(250, style({height: 0}))
+    transition('* => closing', [
+      style({ height: '*' }),
+      animate(250, style({ height: 0 }))
     ])
   ])
   ],
 })
 export class NotificationComponent implements OnInit {
+
+  startAnimationNotification = new EventEmitter<Notification>();
+  stopAnimationNotification = new EventEmitter<Notification>();
+
+  @Input() notification: Notification;
+
   ngOnInit(): void {
     this.expand();
   }
 
-  @Input() notification: Notification;
-  state: string = 'void';
-
-  constructor(private notService: NotificationService) {
-    this.expand();
+  constructor(private notificationService: NotificationService) {
   }
 
   expand() {
-    this.state = 'in';
+    this.startAnimationNotification.emit(this.notification);
   }
 
   collapse() {
-    this.state = 'void';
+    this.startAnimationNotification.emit(this.notification);
   }
 
-  closeNotification() {
-    this.collapse();
-    setTimeout(() => {
-      this.notService.removeNotification(this.notification);
-    }, 250);
+  animationDone($event: AnimationEvent) {
+    this.stopAnimationNotification.emit(this.notification);
   }
 }
 

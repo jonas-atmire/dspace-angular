@@ -1,11 +1,11 @@
 export class Notification {
+  id: string;
   message: string;
   type: NotificationType;
   title: string;
   timeout: number;
   dismissible: boolean;
-  closed: boolean = false;
-  state: string = 'void';
+  state: string = 'closed';
 }
 
 export enum NotificationType {

@@ -1,7 +1,9 @@
-<div class="toggle-container" [@shrinkOut]="state">
+<div class="toggle-container"
+     [@openClose]="notification.state"
+     (@openClose.done)="animationDone($event)">
   <ngb-alert type="{{notification.type}}"
              [dismissible]="notification.dismissible"
-             (close)="closeNotification()">
+             (close)="collapse()">
     <h4 *ngIf="title" class="alert-heading">{{notification.title}}</h4>
     {{notification.message}}
   </ngb-alert>

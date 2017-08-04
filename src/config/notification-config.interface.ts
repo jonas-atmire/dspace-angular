@@ -1,7 +1,8 @@
 import { NotificationType } from '../app/notification/notification.model';
 
-export interface NotificationConfig{
+export interface NotificationConfig {
   type: NotificationType;
   dismissible: boolean;
   timeout: number;
+  animationDuration: number;
 }
