@@ -1,16 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
 import { Notification } from './notification.model';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GLOBAL_CONFIG, GlobalConfig } from '../../config';
 import { UUID } from 'angular2-uuid';
+import {
+  AddToNotificationCacheAction,
+  RemoveFromNotificationCacheAction, UpdateStatusAction
+} from '../core/cache/notification-cache.actions';
+import { Store } from '@ngrx/store';
+import { NotificationState } from '../core/cache/notification-cache.reducer';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class NotificationService {
-
-  notifications: BehaviorSubject<Notification[]>;
-
-  constructor(@Inject(GLOBAL_CONFIG) public config: GlobalConfig) {
-    this.notifications = new BehaviorSubject<Notification[]>([]);
+export class NotificationService{
+  constructor(@Inject(GLOBAL_CONFIG) public config: GlobalConfig, private store : Store<NotificationState>) {
   }
 
   addNotification(message: string) {
@@ -20,8 +22,7 @@ export class NotificationService {
         this.closeNotificationAnimation(notification);
       }, notification.timeout);
     }
-    this.notifications.next([ ...this.notifications.getValue(), notification ])
-
+    this.store.dispatch(new AddToNotificationCacheAction(notification));
   }
 
   private createNotification(message: string) {
@@ -36,23 +37,23 @@ export class NotificationService {
   }
 
   closeNotificationAnimation(notification: Notification) {
-    notification.state = 'closing';
-    notification.dismissible = false;
+    this.store.dispatch(new UpdateStatusAction(notification.id, 'closing'));
   }
 
   expandNotification(notification: Notification) {
-    notification.state = 'opening';
+    this.store.dispatch(new UpdateStatusAction(notification.id, 'opening'));
   }
 
   notificationOpened(notification: Notification){
-    notification.state = 'open';
+    this.store.dispatch(new UpdateStatusAction(notification.id, 'open'));
   }
   removeNotification(notification: Notification) {
-    notification.state = 'closed';
-    let notifications = this.notifications.getValue();
-    let index: number = notifications.indexOf(notification);
-    if (index !== -1) {
-      notifications.splice(index, 1);
-    }
+    this.store.dispatch(new UpdateStatusAction(notification.id, 'closed'));
+    this.store.dispatch(new RemoveFromNotificationCacheAction(notification.id));
+  }
+
+  getNotifications(): Observable<Notification[]> {
+    let observable = this.store.select<NotificationState>('notification');
+    return observable.map(value => value.notifications);
   }
 }

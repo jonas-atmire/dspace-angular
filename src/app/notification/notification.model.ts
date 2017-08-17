@@ -5,7 +5,7 @@ export class Notification {
   title: string;
   timeout: number;
   dismissible: boolean;
-  state: string = 'closed';
+  state: string = 'opening';
 }
 
 export enum NotificationType {

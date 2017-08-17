@@ -10,19 +10,22 @@ import { CoreState, coreReducer } from './core/core.reducers';
 import { StoreActionTypes } from './store.actions';
 
 import { ENV_CONFIG } from '../config';
+import { NotificationState, notificationReducer } from './core/cache/notification-cache.reducer';
 
 export interface AppState {
   core: CoreState;
   router: RouterState;
   hostWindow: HostWindowState;
   header: HeaderState;
+  notification : NotificationState
 }
 
 export const reducers = {
   core: coreReducer,
   router: routerReducer,
   hostWindow: hostWindowReducer,
-  header: headerReducer
+  header: headerReducer,
+  notification : notificationReducer
 };
 
 export function rootReducer(state: any, action: any) {

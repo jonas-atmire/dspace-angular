@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { type } from '../../shared/ngrx/type';
-import { CacheableNotification } from './notification-cache.reducer';
+import { Notification } from '../../notification/notification.model';
 
 /**
  * The list of NotificationCacheAction type definitions
@@ -9,6 +9,7 @@ import { CacheableNotification } from './notification-cache.reducer';
 export const NotificationCacheActionTypes = {
   ADD: type('dspace/core/cache/notification/ADD'),
   REMOVE: type('dspace/core/cache/notification/REMOVE'),
+  UPDATE_STATUS: type('dspace/core/cache/notification/EXPAND'),
 };
 
 
@@ -20,10 +21,7 @@ export const NotificationCacheActionTypes = {
 export class AddToNotificationCacheAction implements Action {
   type = NotificationCacheActionTypes.ADD;
   payload: {
-    notificationTOCache: CacheableNotification;
-    timeAdded: number;
-    msToLive: number;
-    requestHref: string;
+    notification: Notification;
   };
 
   /**
@@ -40,8 +38,8 @@ export class AddToNotificationCacheAction implements Action {
    *    This isn't necessarily the same as the notification's self
    *    link, it could have been part of a list for example
    */
-  constructor(notificationToCache: CacheableNotification, timeAdded: number, msToLive: number, requestHref: string) {
-    this.payload = { notificationTOCache: notificationToCache, timeAdded, msToLive, requestHref };
+  constructor(notification: Notification) {
+    this.payload = { notification: notification };
   }
 }
 
@@ -63,10 +61,25 @@ export class RemoveFromNotificationCacheAction implements Action {
   }
 }
 
-
 /**
  * A type to encompass all NotificationCacheActions
  */
+export class UpdateStatusAction implements Action {
+  type = NotificationCacheActionTypes.UPDATE_STATUS;
+  payload:{
+    uuid:string,
+    state:string;
+  }
+  constructor(uuid: string, state:string){
+    this.payload = {
+      uuid : uuid,
+      state : state
+    }
+  }
+}
+
 export type NotificationCacheAction
   = AddToNotificationCacheAction
-  | RemoveFromNotificationCacheAction;
+  | RemoveFromNotificationCacheAction
+  | UpdateStatusAction;
+

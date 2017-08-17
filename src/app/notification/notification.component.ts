@@ -1,5 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { NotificationService } from './notification.service';
+import { Component, Input, EventEmitter } from '@angular/core';
 import { Notification } from './notification.model';
 
 import {
@@ -27,19 +26,12 @@ import {
   ])
   ],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent {
 
   startAnimationNotification = new EventEmitter<Notification>();
   stopAnimationNotification = new EventEmitter<Notification>();
 
   @Input() notification: Notification;
-
-  ngOnInit(): void {
-    this.expand();
-  }
-
-  constructor(private notificationService: NotificationService) {
-  }
 
   expand() {
     this.startAnimationNotification.emit(this.notification);

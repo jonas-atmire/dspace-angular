@@ -3,51 +3,41 @@
  *
  * A cacheable object should have a uuid
  */
-import { CacheEntry } from './cache-entry';
 import {
   AddToNotificationCacheAction, NotificationCacheAction,
-  NotificationCacheActionTypes, RemoveFromNotificationCacheAction
+  NotificationCacheActionTypes, RemoveFromNotificationCacheAction, UpdateStatusAction
 } from './notification-cache.actions';
 import { hasValue } from '../../shared/empty.util';
+import { Notification } from '../../notification/notification.model';
 
-export interface CacheableNotification {
-  uuid: string;
-  self?: string;
-}
-
-/**
- * An entry in the ObjectCache
- */
-export class NotificationCacheEntry implements CacheEntry {
-  data: CacheableNotification;
-  timeAdded: number;
-  msToLive: number;
-}
-
+let counter = 0;
 /**
  * The ObjectCache State
  *
  * Consists of a map with UUIDs as keys,
  * and ObjectCacheEntries as values
  */
-export interface NotificationCacheState {
-  [uuid: string]: CacheableNotification
+export interface NotificationState {
+  notifications: Notification[];
+}
+
+const initialState: NotificationState = {
+  notifications : []
 }
 
 
-// Object.create(null) ensures the object has no default js properties (e.g. `__proto__`)
-const initialState: NotificationCacheState = Object.create(null);
-
-
-export const notificationReducer = (state = initialState, action: NotificationCacheAction): NotificationCacheState => {
+export const notificationReducer = (state = initialState, action: NotificationCacheAction): NotificationState => {
   switch (action.type) {
 
     case NotificationCacheActionTypes.ADD: {
-      return addToNotificationCache(state, action as AddToNotificationCacheAction);
+      return addToNotificationCache(state, action as AddToNotificationCacheAction)
     }
 
     case NotificationCacheActionTypes.REMOVE: {
       return removeFromNotificationCache(state, action as RemoveFromNotificationCacheAction)
+    }
+    case NotificationCacheActionTypes.UPDATE_STATUS: {
+      return updateNotificationStatus(state, action as UpdateStatusAction)
     }
 
     default: {
@@ -67,14 +57,11 @@ export const notificationReducer = (state = initialState, action: NotificationCa
  * @return ObjectCacheState
  *    the new state, with the object added, or overwritten.
  */
-function addToNotificationCache(state: NotificationCacheState, action: AddToNotificationCacheAction): NotificationCacheState {
+function addToNotificationCache(state: NotificationState, action: AddToNotificationCacheAction): NotificationState {
+
+  let notifications = [ ...state.notifications, action.payload.notification ];
   return Object.assign({}, state, {
-    [action.payload.notificationTOCache.uuid]: {
-      data: action.payload.notificationTOCache,
-      timeAdded: action.payload.timeAdded,
-      msToLive: action.payload.msToLive,
-      requestHref: action.payload.requestHref
-    }
+    notifications: notifications
   });
 }
 
@@ -88,14 +75,34 @@ function addToNotificationCache(state: NotificationCacheState, action: AddToNoti
  * @return ObjectCacheState
  *    the new state, with the object removed if it existed.
  */
-function removeFromNotificationCache(state: NotificationCacheState, action: RemoveFromNotificationCacheAction): NotificationCacheState {
-  if (hasValue(state[action.payload])) {
-    const newObjectCache = Object.assign({}, state);
-    delete newObjectCache[action.payload];
+function removeFromNotificationCache(state: NotificationState, action: RemoveFromNotificationCacheAction): NotificationState {
+  const newNotifications = state.notifications.filter((notification) => notification.id !== action.payload)
+  return Object.assign({}, state, {
+    notifications: newNotifications
+  });
 
-    return newObjectCache;
-  } else {
-    return state;
-  }
 }
+
+function updateNotificationStatus(state: NotificationState, action: UpdateStatusAction): NotificationState {
+  let notifications: Notification[] = [];
+  state.notifications.map(value => {
+    if (value.id === action.payload.uuid) {
+      notifications.push(copyNotification(value, action.payload.state));
+    } else {
+      notifications.push(value);
+    }
+  })
+  return Object.assign({}, state, {
+    notifications: [ ...notifications ]
+  });
+
+}
+
+function copyNotification(notification: Notification, notificationState : string): Notification{
+  return Object.assign({}, notification,{
+    state : notificationState,
+    dismissible: (notificationState == 'closing') ? false : notification.dismissible
+  })
+}
+
 

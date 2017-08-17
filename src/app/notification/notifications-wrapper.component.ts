@@ -16,35 +16,24 @@ export class NotificationsWrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.notifications = this.notificationService.notifications;
+    this.notifications = this.notificationService.getNotifications();
   }
 
   startAnimationNotification(notification: Notification) {
-    if (notification.state === 'closed') {
-      this.expandNotification(notification);
+    if (notification.state === 'open') {
+      this.notificationService.closeNotificationAnimation(notification);
     } else {
-      this.collapseNotification(notification);
+      this.notificationService.expandNotification(notification);
     }
   }
 
   stopAnimationNotification(notification: Notification) {
     if (notification.state === 'closing') {
       this.notificationService.removeNotification(notification);
-    } else {
-      this.notificationOpened(notification)
+    } else if(notification.state==='opening'){
+      this.notificationService.notificationOpened(notification);
     }
   }
 
-  collapseNotification(notification: Notification) {
-    notification.state = 'closing';
-    notification.dismissible = false;
-  }
-
-  expandNotification(notification: Notification) {
-    notification.state = 'opening';
-  }
-
-  notificationOpened(notification: Notification) {
-    notification.state = 'open';
-  }
 }
+
