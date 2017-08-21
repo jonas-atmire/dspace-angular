@@ -21,6 +21,9 @@ import { NativeWindowRef, NativeWindowService } from './shared/window.service';
 
 import { GLOBAL_CONFIG, GlobalConfig } from '../config';
 import { NotificationService } from "./notification/notification.service";
+import { NotificationBuilder } from './notification/notification.builder';
+import { UUID } from 'angular2-uuid';
+import { Notification } from './notification/notification.model';
 
 @Component({
   selector: 'ds-app',
@@ -78,7 +81,14 @@ export class AppComponent implements OnInit {
   }
 
   private testAddNotification(): void {
-    this.notificationService.addNotification('Added new notification at:' + new Date().toTimeString());
+    let message = 'Added new notification at:' + new Date().toTimeString();
+    let notification : Notification = new NotificationBuilder()
+      .id(UUID.UUID())
+      .type(this.config.notification.type)
+      .dismissible(this.config.notification.dismissible)
+      .timeout(this.config.notification.timeout)
+      .message(message).build();
+    this.notificationService.addNotification(notification);
   }
 
 }
