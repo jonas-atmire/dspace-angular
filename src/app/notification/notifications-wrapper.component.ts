@@ -5,7 +5,7 @@ import { Notification } from './notification.model';
 
 @Component({
   selector: 'ds-notifications-wrapper',
-  styleUrls: [ './notifications-wrapper.component.css' ],
+  styleUrls: [ './notifications-wrapper.component.scss' ],
   templateUrl: './notifications-wrapper.component.html',
 })
 export class NotificationsWrapperComponent implements OnInit {

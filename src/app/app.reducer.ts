@@ -10,7 +10,7 @@ import { CoreState, coreReducer } from './core/core.reducers';
 import { StoreActionTypes } from './store.actions';
 
 import { ENV_CONFIG } from '../config';
-import { NotificationState, notificationReducer } from './core/cache/notification-cache.reducer';
+import { NotificationState, notificationReducer } from './core/cache/notification.reducer';
 
 export interface AppState {
   core: CoreState;

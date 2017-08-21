@@ -3,11 +3,11 @@ import { Notification } from './notification.model';
 import { GLOBAL_CONFIG, GlobalConfig } from '../../config';
 import { UUID } from 'angular2-uuid';
 import {
-  AddToNotificationCacheAction,
-  RemoveFromNotificationCacheAction, UpdateStatusAction
-} from '../core/cache/notification-cache.actions';
+  AddNotificationAction, InitializeCloseTimeoutAction,
+  RemoveNotificationAction, UpdateStatusAction
+} from '../core/cache/notification.actions';
 import { Store } from '@ngrx/store';
-import { NotificationState } from '../core/cache/notification-cache.reducer';
+import { NotificationState } from '../core/cache/notification.reducer';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -16,21 +16,20 @@ export class NotificationService{
   }
 
   addNotification(message: string) {
-    let notification = this.createNotification(message);
+    let notification = new Notification();
+    notification = this.createNotification(notification);
+    notification.message= message;
+    this.store.dispatch(new AddNotificationAction(notification));
     if (notification.timeout > 0) {
-      setTimeout(() => {
-        this.closeNotificationAnimation(notification);
-      }, notification.timeout);
+      // Dispatch action to be caught by "TimeOutClosingEffect"
+      this.store.dispatch(new InitializeCloseTimeoutAction(notification));
     }
-    this.store.dispatch(new AddToNotificationCacheAction(notification));
   }
 
-  private createNotification(message: string) {
-    let notification = new Notification();
+  private createNotification(notification: Notification) {
     notification.type = this.config.notification.type;
     notification.dismissible = this.config.notification.dismissible;
     notification.timeout = this.config.notification.timeout;
-    notification.message = message;
     let uuid: string = UUID.UUID();
     notification.id = uuid;
     return notification;
@@ -49,7 +48,7 @@ export class NotificationService{
   }
   removeNotification(notification: Notification) {
     this.store.dispatch(new UpdateStatusAction(notification.id, 'closed'));
-    this.store.dispatch(new RemoveFromNotificationCacheAction(notification.id));
+    this.store.dispatch(new RemoveNotificationAction(notification.id));
   }
 
   getNotifications(): Observable<Notification[]> {

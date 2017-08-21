@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NotificationComponent
   ],
   providers: [ NotificationService ],
-  imports: [BrowserAnimationsModule]
+  imports: [ BrowserAnimationsModule]
 })
 
 export class NotificationModule {

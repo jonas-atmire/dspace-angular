@@ -1,21 +1,13 @@
-/**
- * An interface to represent objects that can be cached
- *
- * A cacheable object should have a uuid
- */
 import {
-  AddToNotificationCacheAction, NotificationCacheAction,
-  NotificationCacheActionTypes, RemoveFromNotificationCacheAction, UpdateStatusAction
-} from './notification-cache.actions';
+  AddNotificationAction, InitializeCloseTimeoutAction, NotificationAction,
+  NotificationActionTypes, RemoveNotificationAction, UpdateStatusAction
+} from './notification.actions';
 import { hasValue } from '../../shared/empty.util';
 import { Notification } from '../../notification/notification.model';
 
 let counter = 0;
 /**
- * The ObjectCache State
- *
- * Consists of a map with UUIDs as keys,
- * and ObjectCacheEntries as values
+ * The NotificationState State
  */
 export interface NotificationState {
   notifications: Notification[];
@@ -26,18 +18,21 @@ const initialState: NotificationState = {
 }
 
 
-export const notificationReducer = (state = initialState, action: NotificationCacheAction): NotificationState => {
+export const notificationReducer = (state = initialState, action: NotificationAction): NotificationState => {
   switch (action.type) {
 
-    case NotificationCacheActionTypes.ADD: {
-      return addToNotificationCache(state, action as AddToNotificationCacheAction)
+    case NotificationActionTypes.ADD: {
+      return addToNotificationState(state, action as AddNotificationAction)
     }
 
-    case NotificationCacheActionTypes.REMOVE: {
-      return removeFromNotificationCache(state, action as RemoveFromNotificationCacheAction)
+    case NotificationActionTypes.REMOVE: {
+      return removeFromNotificationState(state, action as RemoveNotificationAction)
     }
-    case NotificationCacheActionTypes.UPDATE_STATUS: {
+    case NotificationActionTypes.UPDATE_STATUS: {
       return updateNotificationStatus(state, action as UpdateStatusAction)
+    }
+    case NotificationActionTypes.INITIALISE_CLOSE_TIMEOUT: {
+      return initializeCloseTimeoutAction(state, action as InitializeCloseTimeoutAction)
     }
 
     default: {
@@ -48,16 +43,16 @@ export const notificationReducer = (state = initialState, action: NotificationCa
 
 
 /**
- * Add an object to the cache
+ * Add an object to the state
  *
  * @param state
  *    the current state
  * @param action
- *    an AddToObjectCacheAction
- * @return ObjectCacheState
+ *    an AddNotificationAction
+ * @return NotificationState
  *    the new state, with the object added, or overwritten.
  */
-function addToNotificationCache(state: NotificationState, action: AddToNotificationCacheAction): NotificationState {
+function addToNotificationState(state: NotificationState, action: AddNotificationAction): NotificationState {
 
   let notifications = [ ...state.notifications, action.payload.notification ];
   return Object.assign({}, state, {
@@ -66,16 +61,16 @@ function addToNotificationCache(state: NotificationState, action: AddToNotificat
 }
 
 /**
- * Remove an object from the cache
+ * Remove an object from the state
  *
  * @param state
  *    the current state
  * @param action
- *    an RemoveFromObjectCacheAction
- * @return ObjectCacheState
+ *    an RemoveNotificationAction
+ * @return NotificationState
  *    the new state, with the object removed if it existed.
  */
-function removeFromNotificationCache(state: NotificationState, action: RemoveFromNotificationCacheAction): NotificationState {
+function removeFromNotificationState(state: NotificationState, action: RemoveNotificationAction): NotificationState {
   const newNotifications = state.notifications.filter((notification) => notification.id !== action.payload)
   return Object.assign({}, state, {
     notifications: newNotifications
@@ -95,6 +90,10 @@ function updateNotificationStatus(state: NotificationState, action: UpdateStatus
   return Object.assign({}, state, {
     notifications: [ ...notifications ]
   });
+
+}
+function initializeCloseTimeoutAction(state: NotificationState, action: InitializeCloseTimeoutAction): NotificationState {
+  return Object.assign({}, state);
 
 }
 

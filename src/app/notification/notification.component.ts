@@ -11,7 +11,7 @@ import {
 
 @Component({
   selector: 'ds-notification',
-  styleUrls: [ './notification.component.css' ],
+  styleUrls: [ './notification.component.scss' ],
   templateUrl: './notification.component.html',
   outputs: ['stopAnimationNotification', 'startAnimationNotification' ],
   animations: [ trigger('openClose', [
