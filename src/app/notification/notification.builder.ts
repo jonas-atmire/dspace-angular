@@ -1,11 +1,15 @@
 import { Notification, NotificationType } from './notification.model';
+import { GlobalConfig } from '../../config/global-config.interface';
 
 export class NotificationBuilder {
 
   private notification: Notification;
 
-  constructor() {
+  constructor(private config: GlobalConfig) {
     this.notification = new Notification();
+    this.notification.type = this.config.notification.type;
+    this.notification.dismissible= this.config.notification.dismissible;
+    this.notification.timeout= this.config.notification.timeout;
   }
 
   public id(id: string): NotificationBuilder {

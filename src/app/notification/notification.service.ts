@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { Notification } from './notification.model';
-import { GLOBAL_CONFIG, GlobalConfig } from '../../config';
 import {
   AddNotificationAction, InitializeCloseTimeoutAction,
   RemoveNotificationAction, UpdateStatusAction
@@ -11,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class NotificationService{
-  constructor(@Inject(GLOBAL_CONFIG) public config: GlobalConfig, private store : Store<NotificationState>) {
+  constructor(private store : Store<NotificationState>) {
   }
 
   addNotification(notification: Notification) {
@@ -42,3 +41,5 @@ export class NotificationService{
     return observable.map(value => value.notifications);
   }
 }
+
+
