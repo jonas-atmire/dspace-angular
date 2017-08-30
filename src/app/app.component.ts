@@ -21,8 +21,6 @@ import { NativeWindowRef, NativeWindowService } from './shared/window.service';
 
 import { GLOBAL_CONFIG, GlobalConfig } from '../config';
 import { NotificationService } from "./notification/notification.service";
-import { Notification } from './notification/notification.model';
-import { NotificationBuilder } from './notification/notification.builder';
 
 @Component({
   selector: 'ds-app',
@@ -79,11 +77,5 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private testAddNotification(): void {
-    let message = 'Added new notification at:' + new Date().toTimeString();
-    let notification : Notification = new NotificationBuilder(this.config)
-      .message(message).build()
-    this.notificationService.addNotification(notification);
-  }
 
 }
