@@ -3,9 +3,9 @@ import { Notification } from './notification.model';
 import {
   AddNotificationAction, InitializeCloseTimeoutAction,
   RemoveNotificationAction, UpdateStatusAction
-} from '../core/cache/notification.actions';
+} from './state/notification.actions';
 import { Store } from '@ngrx/store';
-import { NotificationState } from '../core/cache/notification.reducer';
+import { NotificationState } from './state/notification.reducer';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()

@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import {
   InitializeCloseTimeoutAction, NotificationActionTypes,
   UpdateStatusAction
-} from '../../core/cache/notification.actions';
+} from '../state/notification.actions';
 import { Notification } from '../notification.model';
-import { NotificationState } from '../../core/cache/notification.reducer';
+import { NotificationState } from '../state/notification.reducer';
 import { Store } from '@ngrx/store';
 
 /**
