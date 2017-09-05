@@ -20,7 +20,6 @@ import { HostWindowResizeAction } from './shared/host-window.actions';
 import { NativeWindowRef, NativeWindowService } from './shared/window.service';
 
 import { GLOBAL_CONFIG, GlobalConfig } from '../config';
-import { NotificationService } from "./notification/notification.service";
 
 @Component({
   selector: 'ds-app',
@@ -28,7 +27,6 @@ import { NotificationService } from "./notification/notification.service";
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
   encapsulation: ViewEncapsulation.None,
-  providers:[NotificationService]
 })
 export class AppComponent implements OnInit {
 
@@ -36,7 +34,6 @@ export class AppComponent implements OnInit {
     @Inject(GLOBAL_CONFIG) public config: GlobalConfig,
     @Inject(NativeWindowService) private _window: NativeWindowRef,
     private translate: TranslateService,
-    private notificationService: NotificationService,
     private cache: TransferState,
     private store: Store<HostWindowState>
   ) {

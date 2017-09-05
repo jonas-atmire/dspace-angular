@@ -17,6 +17,9 @@ const initialState: NotificationState = {
 
 
 export const notificationReducer = (state = initialState, action: NotificationAction): NotificationState => {
+  if(action == null){
+    return state;
+  }
   switch (action.type) {
 
     case NotificationActionTypes.ADD: {
