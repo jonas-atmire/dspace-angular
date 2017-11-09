@@ -11,6 +11,7 @@ import { SearchService } from './search-service/search.service';
 import { SearchSidebarComponent } from './search-sidebar/search-sidebar.component';
 import { SearchSidebarService } from './search-sidebar/search-sidebar.service';
 import { SearchSidebarEffects } from './search-sidebar/search-sidebar.effects';
+import { SearchSettingsComponent } from './search-settings/search-settings.component';
 import { EffectsModule } from '@ngrx/effects';
 
 const effects = [
@@ -28,6 +29,7 @@ const effects = [
     SearchPageComponent,
     SearchResultsComponent,
     SearchSidebarComponent,
+    SearchSettingsComponent,
     ItemSearchResultListElementComponent,
     CollectionSearchResultListElementComponent,
     CommunitySearchResultListElementComponent

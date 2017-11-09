@@ -48,12 +48,7 @@ export class SearchPageComponent implements OnInit, OnDestroy {
     this.isMobileView = this.windowService.isXs();
     this.scopeList = communityService.findAll();
     // Initial pagination config
-    const pagination: PaginationComponentOptions = new PaginationComponentOptions();
-    pagination.id = 'search-results-pagination';
-    pagination.currentPage = 1;
-    pagination.pageSize = 10;
-    const sort: SortOptions = new SortOptions();
-    this.searchOptions = { pagination: pagination, sort: sort };
+    this.searchOptions = this.service.searchOptions;
   }
 
   ngOnInit(): void {
